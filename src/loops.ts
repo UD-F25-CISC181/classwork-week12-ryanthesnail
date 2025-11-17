@@ -8,7 +8,18 @@
  * @returns The sum of all numbers in the array
  */
 export function summate(nums: number[]): number {
-    return 0;
+    /**
+    can also do this
+    acc: accumulator variable
+    val: value in the array
+    acc + val: what we want to happen with the value
+    0: the default value of acc
+
+    nums.reduce((acc, val) => acc + val, 0)
+     */
+    let sum: number = 0;
+    nums.forEach((n: number) => (sum += n));
+    return sum;
 }
 
 /**
@@ -17,7 +28,8 @@ export function summate(nums: number[]): number {
  * @returns The average of all numbers in the array
  */
 export function average(nums: number[]): number {
-    return 0;
+    let l: number = nums.length;
+    return l !== 0 ? summate(nums) / nums.length : 0;
 }
 
 /**
@@ -26,7 +38,7 @@ export function average(nums: number[]): number {
  * @returns The array of numbers divided by 2
  */
 export function halve(nums: number[]): number[] {
-    return [];
+    return nums.map((n: number) => n / 2);
 }
 
 /**
@@ -35,7 +47,7 @@ export function halve(nums: number[]): number[] {
  * @returns An array of only positive numbers
  */
 export function onlyPositives(nums: number[]): number[] {
-    return [];
+    return nums.filter((n: number) => n > 0);
 }
 
 /**
@@ -44,7 +56,8 @@ export function onlyPositives(nums: number[]): number[] {
  * @returns The average of only the positive numbers
  */
 export function averagePositives(nums: number[]): number {
-    return 0;
+    let pos: number[] = onlyPositives(nums);
+    return !pos.length ? 0 : summate(pos) / pos.length;
 }
 
 /**
@@ -53,7 +66,7 @@ export function averagePositives(nums: number[]): number {
  * @returns An array of only strings that end with 's'
  */
 export function getPlurals(words: string[]): string[] {
-    return [];
+    return words.filter((w: string) => w.endsWith("s"));
 }
 
 /**
@@ -63,7 +76,8 @@ export function getPlurals(words: string[]): string[] {
  * @returns The first string that ends with 's'
  */
 export function firstPlural(words: string[]): string {
-    return "";
+    let found = words.find((w: string) => w.endsWith("s"));
+    return found === undefined ? "" : found;
 }
 
 /**
@@ -73,7 +87,13 @@ export function firstPlural(words: string[]): string {
  * @returns The array of numbers with values less than the threshold increased by 1
  */
 export function growIfSmall(nums: number[], threshold: number): number[] {
-    return [];
+    /*
+    note the double return! the first is big return, the second 
+    is the return of the unnamed function (i forgot the name)
+    */
+    return nums.map((n: number) => {
+        return n >= threshold ? n : n + 1;
+    });
 }
 
 /**
@@ -84,7 +104,11 @@ export function growIfSmall(nums: number[], threshold: number): number[] {
  * @returns The longest string
  */
 export function longestString(words: string[]): string {
-    return "";
+    return !words.length ? "" : (
+            words.reduce((acc, val) => {
+                return acc.length < val.length ? (acc = val) : acc;
+            }, words[0])
+        );
 }
 
 /**
@@ -95,7 +119,8 @@ export function longestString(words: string[]): string {
  * @returns The longest string that ends with 's'
  */
 export function longestPlural(words: string[]): string {
-    return "";
+    let ws: string[] = getPlurals(words);
+    return longestString(ws);
 }
 
 /**
@@ -107,5 +132,30 @@ export function longestPlural(words: string[]): string {
  * @returns An array of the sums of the numbers at each index
  */
 export function addPairs(nums1: number[], nums2: number[]): number[] {
-    return [];
+    let newNums: number[] = [];
+    let numsCopy: number[] = [];
+    if (nums1.length > nums2.length) {
+        numsCopy = Array.from(nums2);
+        for (let i = nums2.length; i < nums1.length; i++) {
+            numsCopy.push(0);
+        }
+        for (let i = 0; i < nums1.length; i++) {
+            newNums.push(nums1[i] + numsCopy[i]);
+        }
+        return newNums;
+    } else if (nums2.length > nums1.length) {
+        numsCopy = Array.from(nums1);
+        for (let i = nums1.length; i < nums2.length; i++) {
+            numsCopy.push(0);
+        }
+        for (let i = 0; i < nums2.length; i++) {
+            newNums.push(numsCopy[i] + nums2[i]);
+        }
+        return newNums;
+    } else {
+        for (let i = 0; i < nums1.length; i++) {
+            newNums.push(nums1[i] + nums2[i]);
+        }
+        return newNums;
+    }
 }
